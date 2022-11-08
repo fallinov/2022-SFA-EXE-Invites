@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RSVP App | Répondez s'il vous plaît</title>
+    <!-- Polices Web -->
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <!-- Styles CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>RSVP</h1>
+        <p>Répondez S'il Vous Plaît !</p>
+        <form>
+            <input type="text" name="name" placeholder="Invitez quelqu'un">
+            <button type="submit">Ajouter</button>
+        </form>
+    </header>
+
+    <div class="main">
+        <h2>Liste des invités</h2>
+        <div><label>Masquer les invités qui n'ont pas confirmé <input type="checkbox" name="masquer"></label></div>
+        <ul id="invites">
+            <li>
+                <span>Roger</span>
+                <label><input type="checkbox"> confirmé</label>
+                <button>Supprimer</button>
+            </li>
+            <li>
+                <span>Novak</span>
+                <label><input type="checkbox"> confirmé</label>
+                <button>Supprimer</button>
+            </li>
+            <li>
+                <span>Rafa</span>
+                <label><input type="checkbox"> confirmé</label>
+                <button>Supprimer</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<script src="js/main.js"></script>
+</body>
+</html>
