@@ -18,9 +18,9 @@ const ulInvites = document.getElementById('invites');
 const cAcMasquer = document.querySelector('[name="masquer"]');
 
 /**
- *
- * @param nomInvite
- * @returns {number}
+ * Retourne la position de l'invité dans le tableau
+ * @param nomInvite Nom de l'invité rechercher
+ * @returns {number} index ou -1 si introuvable
  */
 function getIndexInvite (nomInvite) {
     return tabInvites.findIndex(invite => invite.nom.toLowerCase() === nomInvite.toLowerCase());
