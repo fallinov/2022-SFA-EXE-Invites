@@ -11,6 +11,7 @@
     - Demander à l'utilisateur de confirmer la suppression
     - Afficher le nom de l'invité dans le message de confirmation
       `Retirer NOM_INVITE de la liste des invités ?`
+    - Si confirmé, on supprime l'invité
 - [ ] Confirmer la présence d'un invité
     - cocher la case à cocher `confirmé`
     - ajouter la classe CSS `responded` au `<li>` de l'invité.
