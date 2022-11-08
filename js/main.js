@@ -27,7 +27,7 @@ function getIndexInvite (nomInvite) {
 }
 
 /**
- * Fonction qui génère, affiche la lite des invités
+ * Fonction qui génère, affiche, et trie la lite des invités
  */
 function afficheInvites() {
     // Vide la <ul>
