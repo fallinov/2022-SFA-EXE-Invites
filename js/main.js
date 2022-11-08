@@ -6,31 +6,47 @@
  */
 'use strict';
 
-// Variables globales et éléments HTML globaux
+// Tableau stockant les invités
 let tabInvites = [
     { nom: 'Roger', confirme: false },
     { nom: 'Novak', confirme: false },
     { nom: 'Rafa', confirme: true }
-]
+];
+// <ul> où sont affichés les invités
 const ulInvites = document.getElementById('invites');
+// Case à cocher masquer invités pas confirmés
+const cAcMasquer = document.querySelector('[name="masquer"]');
+
+/**
+ *
+ * @param nomInvite
+ * @returns {number}
+ */
+function getIndexInvite (nomInvite) {
+    return tabInvites.findIndex(invite => invite.nom.toLowerCase() === nomInvite.toLowerCase());
+}
 
 /**
  * Fonction qui génère, affiche la lite des invités
  */
 function afficheInvites() {
-    // Vide la liste
-    ulInvites.innerHTML = ''
-    // Trie la liste
-
-    // Crée les <li>
+    // Vide la <ul>
+    ulInvites.innerHTML = '';
+    // Trie le tableau par nom A-Z
+    tabInvites.sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+    // Crée un <li> pour chaque invité
     for( let invite of tabInvites) {
+        // Si on veut afficher que les
+        if(cAcMasquer.checked && !invite.confirme) {
+            continue;
+        }
         // Création du nouvel invité <li>
         let liInvite = document.createElement('li');
-        // Si confirme on ajoute la class responded
+        // Si l'invité à confirmé on ajoute la class 'responded'
         if (invite.confirme) {
             liInvite.classList.add('responded');
         }
-        // Créer le contenu du <li>
+        // contenu du <li>
         liInvite.innerHTML = `<span>${invite.nom}</span>
                               <label>
                                 <input type="checkbox" ${invite.confirme ? 'checked' : ''}>
@@ -43,146 +59,79 @@ function afficheInvites() {
     }
 }
 
-/**
- * Fonction qui ajoute un invité à la liste des invités
- * @param e Event Object
- */
-function ajouterInvite(e) {
-
+// Ajout d'un invité
+document.querySelector('form').addEventListener('submit', (e) => {
     //Désactive l'envoi du formulaire
     e.preventDefault();
-
     //Récupère le nom de l'invité et supprime les espaces en début et fin de chaine.
     let champInvite = document.querySelector('input[name="name"]');
     let nomInvite = champInvite.value.trim();
-
     //Si nom vide
     if (!nomInvite) {
         alert('Entrez un nom pour l\'invité !');
         return;
     }
-
-    // Ajoute l'invité dans le tableau
+    // Ajoute l'invité dans le tableau des invités
     tabInvites.push({
         nom: nomInvite,
         confirme: false
-    })
-    // Réaffiche la liste
-    afficheInvites()
+    });
+    // Ré-affiche, mets à jour la liste des invités
+    afficheInvites();
 
     //Vide le champ de saisie du nom
     champInvite.value = '';
-}
+});
 
-/**
- * Supprime un invité de la liste
- * @param e événement JS
- */
-function supprimerInvite(e) {
-    //https://codepen.io/fallinov/pen/dZMbjL?editors=0011
-
-    //Si l'élément cliqué est le bouton supprimer
-    if(e.target.nodeName === 'BUTTON' && e.target.innerHTML === 'Supprimer') {
-
-        let liInvite = e.target.parentNode;
-        let nomInvite = liInvite.querySelector('span').textContent;
-
-        //Demande une confirmation de la suppression de l'invité
-        if (confirm(`Retirer ${nomInvite} de la liste des invités ?`)) {
-            let index = tabInvites.findIndex(invite => invite.nom === nomInvite)
-            tabInvites.splice(index,1)
-        }
-
-        // Réaffiche la liste
-        afficheInvites()
-    }
-}
-
-/**
- * Confirme ou annule l'inscirption d'un invité
- * @param e événement JS
- */
-function confirmerInvite(e) {
+// Confirmation invité : Changement de l'état de la liste des invités ou de l'un de ses descendants
+ulInvites.addEventListener('change', (e) => {
     //console.log('confirmerInvite : ', e.target.parentNode.parentNode);
     let checkBox = e.target; //Checkbox cliquée
     let liInvite = checkBox.parentNode.parentNode; //<li> qui contient la checkbox
     let nomInvite = liInvite.querySelector('span').textContent;
-
     // Recherche la position, index, de l'invité dans le tableau
-    let index = tabInvites.findIndex(invite => invite.nom === nomInvite)
+    let index = getIndexInvite(nomInvite);
     // Inverse l'état de l'invité
-    //Si on coche la checkbox
-    if (tabInvites[index].confirme) {
-        liInvite.className = 'responded'; //On ajoute la classe CSS responded au <li>
-    } else { //Sinon on décoche
-        checkBox.removeAttribute('checked'); //Supprime l'attribut 'checked'
-        liInvite.className = 'none'; //Supprimer la classe CSS responded
+    tabInvites[index].confirme = !tabInvites[index].confirme;
+    // Ré-affiche la liste
+    afficheInvites();
+});
+
+// Supprimer invité : Clic de la liste des invités ou de l'un de ses descendants
+ulInvites.addEventListener('click', (e) => {
+    //Si l'élément cliqué n'est pas le bouton 'Supprimer'
+    if(e.target.nodeName !== 'BUTTON' || e.target.innerHTML !== 'Supprimer') {
+        return;
     }
 
-    // Si on "décoche" l'invité et que le filtre masquer est actif
-    // on cache le li immédiatement
-    if (checkBox.checked === false && document.querySelector('[name="masquer"]').checked) {
-        liInvite.style.display = 'none';
+    // Récupère le <li> correspondant
+    let liInvite = e.target.parentNode;
+    // Récupère le nom de l'invité
+    let nomInvite = liInvite.querySelector('span').textContent;
+    //Demande une confirmation de la suppression de l'invité
+    if (confirm(`Retirer ${nomInvite} de la liste des invités ?`)) {
+        // Trouve la position, index, de l'invité dans le tableau
+        let index = getIndexInvite(nomInvite);
+        // Retire l'invité du tableau
+        tabInvites.splice(index,1);
+        // Ré-affiche la liste
+        afficheInvites();
     }
-}
+});
 
-/**
- * Si le filtre (checkbox) "masquer les invités" est actif, cache les invités qui n'ont pas confirmé
- * @param e événment JS
- */
-function masquerInvites(e) {
-
-    let invites = ulInvites.children;
-
-    for(let i=0; i<invites.length; i++) {
-        //Si filtre masquer est actif et invité pas confirmé > on le cache
-        if (e.target.checked && invites[i].querySelector('[type="checkbox"]').checked === false) {
-            invites[i].style.display = 'none';
-        } else {
-            invites[i].style.display = '';
-        }
-    }
-
-    /* Même chose avec forEach
-    invites.forEach((ele) => {
-        //Si masquer actif et invité pas confirmé
-        if (e.target.checked && ele.querySelector('[type="checkbox"]').checked === false) {
-            ele.style.display = 'none';
-        } else {
-            ele.style.display = '';
-        }
-    });
-    */
-}
-
-/**
- * Sauvegard le contenu HTML de la liste dans le localstorage
- */
-function enregistrer () {
-    localStorage.setItem("invites", JSON.stringify(tabInvites));
+// Sauvegarder la liste actuelle dans le localStorage du navigateurt : Clic du bouton enregistrer
+document.querySelector('form button.save').addEventListener('click', () => {
+    localStorage.setItem('invites', JSON.stringify(tabInvites));
     alert('Changements sauvegardés !');
-}
+});
 
-/** Gestion des événments de la page **/
-//Envoi du formulaire
-document.querySelector('form').addEventListener('submit', ajouterInvite);
+// Changement de l'état de la case à cocher 'Masquer les invités qui n'ont pas confirmé'
+cAcMasquer.addEventListener('change', () => afficheInvites());
 
-//Confirmation invité : Changement de l'état de la liste des invités ou de l'un de ses descendants
-ulInvites.addEventListener('change', confirmerInvite);
-
-//Supprimer invité : Clic de la liste des invités ou de l'un de ses descendants
-ulInvites.addEventListener('click', supprimerInvite);
-
-//Sauvegarder la liste actuelle dans le localStorage du navigateurt : Clic du bouton enregistrer
-document.querySelector('form button.save').addEventListener('click', enregistrer);
-
-//Changement de l'état de la case à cocher 'Masquer les invités qui n'ont pas confirmé'
-document.querySelector('[name="masquer"]').addEventListener('change', masquerInvites);
-
-/* Gestion du local storage, sauvegarde locale des données de la page */
-//Si une sauvegarde existe, on la charge
+// LocalStorage, si une sauvegarde existe, on la charge
 if (localStorage.getItem('invites')) {
-    tabInvites = JSON.parse(localStorage.getItem('invites'))
+    tabInvites = JSON.parse(localStorage.getItem('invites'));
 }
+
 // Affiche pour la première fois la liste des invités
-afficheInvites()
+afficheInvites();
