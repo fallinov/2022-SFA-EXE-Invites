@@ -6,7 +6,7 @@
 
 const ulInvites = document.querySelector('#invites');
 
-
+/** Suppression d'un invité <li> */
 ulInvites.addEventListener('click', (e) => {
     let cible = e.target;
 
@@ -15,4 +15,16 @@ ulInvites.addEventListener('click', (e) => {
     }
 
     cible.parentNode.remove();
+});
+
+/** Confirmation d'un invité */
+ulInvites.addEventListener('change', (e) => {
+    let chkInvite = e.target;
+    let liInvite = e.target.parentNode.parentNode;
+    // Si case cochée
+    if (chkInvite.checked) {
+        liInvite.classList.add('responded');
+    } else {
+        liInvite.classList.remove('responded');
+    }
 });
