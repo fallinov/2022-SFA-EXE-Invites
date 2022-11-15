@@ -7,7 +7,37 @@
 'use strict';
 
 const ulInvites = document.querySelector('#invites');
-console.log(ulInvites);
+const chkMasquer = document.querySelector('[name="masquer"]');
+const form = document.querySelector('form');
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    //Récupère le nom de l'invité et supprime les espaces en début et fin de chaine.
+    let champInvite = document.querySelector('input[name="name"]');
+    let nomInvite = champInvite.value.trim();
+
+    //Si nom vide
+    if (!nomInvite) {
+        alert('Entrez un nom pour l\'invité !');
+        return;
+    }
+
+    /** Création du nouvel invité <li> **/
+    let liInvite = document.createElement('li');
+
+    liInvite.innerHTML = `<span>${nomInvite}</span>
+                          <label><input type="checkbox"> confirmé</label>
+                          <button>Supprimer</button>`;
+
+    //Ajoute l'invite à la liste
+    ulInvites.appendChild(liInvite);
+
+    //Vide le champs de saisie du nom
+    champInvite.value = '';
+
+    // Sauvegarde les invités dans le local storage
+    localStorage.setItem('invites', ulInvites.innerHTML);
+});
 
 ulInvites.addEventListener('click', (e) => {
     // Si pas un bouton => STOP
@@ -37,3 +67,25 @@ ulInvites.addEventListener('change', (e) => {
         liInvite.classList.remove('responded');
     }
 });
+
+// Cache les invités qui n'ont pas confirmés
+chkMasquer.addEventListener('change', (e) => {
+    console.log(e.target);
+    // Récupérer tous les <li>
+    const tabInvites = ulInvites.children;
+    // Parcours tous les invites
+    for(let invite of tabInvites) {
+        // Si case masquer cochée et invité PAS confirmé
+        if( chkMasquer.checked && invite.classList.contains('responded') === false ) {
+            invite.style.display = 'none';
+        } else {
+            invite.style.display = 'block';
+        }
+    }
+});
+
+
+// Si invités dans le LS, on les charges
+if (localStorage.getItem('invites')) {
+    ulInvites.innerHTML = localStorage.getItem('invites');
+}
