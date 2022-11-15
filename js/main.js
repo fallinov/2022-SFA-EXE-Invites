@@ -74,13 +74,13 @@ function confirmerInvite(e) {
 
     //Si on coche la checkbox
     if (checkBox.checked) {
-        // checkBox.setAttribute('checked', ''); //On ajoute l'attribut 'checked' à la checkbox
-        // TODO menu.classList.add('vert');
-        liInvite.className = 'responded'; //On ajoute la classe CSS responded au <li>
+        // Pour LS
+        checkBox.setAttribute('checked', ''); //On ajoute l'attribut 'checked' à la checkbox
+        liInvite.classList.add('responded'); //On ajoute la classe CSS responded au <li>
     } else { //Sinon on décoche
-        // checkBox.removeAttribute('checked'); //Supprime l'attribut 'checked'
-        // TODO menu.classList.remove('rouge');
-        liInvite.className = 'none'; //Supprimer la classe CSS responded
+        // // Pour LS
+        checkBox.removeAttribute('checked'); //Supprime l'attribut 'checked'
+        liInvite.classList.remove('responded');; //Supprimer la classe CSS responded
     }
 
     // Si on "décoche" l'invité et que le filtre masquer est actif
