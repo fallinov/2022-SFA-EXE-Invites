@@ -68,6 +68,11 @@ button {
   border: none;
   outline: none;
 }
+
+button.save {
+  background-color: #707070;
+}
+
 header {
   text-align: center;
   background: linear-gradient(90deg, #004358, #1f8a70, #bedb39, #ffe11a, #FD7400),
