@@ -52,12 +52,12 @@ function supprimerInvite(e) {
     //Si l'élément cliqué est le bouton supprimer
     if(e.target.nodeName === 'BUTTON' && e.target.innerHTML === 'Supprimer') {
 
-        let liInvite = e.target.parentNode;
+        let liInvite = e.target.closest('LI');
         let nomInvite = liInvite.querySelector('span').textContent;
 
         //Demande une confirmation de la suppression de l'invité
         if (confirm(`Retirer ${nomInvite} de la liste des invités ?`)) {
-            liInvite.parentNode.removeChild(liInvite);
+            liInvite.remove();
         }
     }
 }
@@ -70,7 +70,7 @@ function confirmerInvite(e) {
     //console.log('confirmerInvite : ', e.target.parentNode.parentNode);
     let checkBox = e.target; //Checkbox cliquée
     // type="checkbox" if(e.target.nodeName === 'BUTTON' && e.target.innerHTML === 'Supprimer') {
-    let liInvite = checkBox.parentNode.parentNode; //<li> qui contient la checkbox
+    let liInvite = checkBox.closest('LI'); //<li> qui contient la checkbox
 
     //Si on coche la checkbox
     if (checkBox.checked) {
