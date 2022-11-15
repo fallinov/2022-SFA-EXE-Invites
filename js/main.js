@@ -69,14 +69,17 @@ function supprimerInvite(e) {
 function confirmerInvite(e) {
     //console.log('confirmerInvite : ', e.target.parentNode.parentNode);
     let checkBox = e.target; //Checkbox cliquée
+    // type="checkbox" if(e.target.nodeName === 'BUTTON' && e.target.innerHTML === 'Supprimer') {
     let liInvite = checkBox.parentNode.parentNode; //<li> qui contient la checkbox
 
     //Si on coche la checkbox
     if (checkBox.checked) {
-        checkBox.setAttribute('checked', ''); //On ajoute l'attribut 'checked' à la checkbox
+        // checkBox.setAttribute('checked', ''); //On ajoute l'attribut 'checked' à la checkbox
+        // TODO menu.classList.add('vert');
         liInvite.className = 'responded'; //On ajoute la classe CSS responded au <li>
     } else { //Sinon on décoche
-        checkBox.removeAttribute('checked'); //Supprime l'attribut 'checked'
+        // checkBox.removeAttribute('checked'); //Supprime l'attribut 'checked'
+        // TODO menu.classList.remove('rouge');
         liInvite.className = 'none'; //Supprimer la classe CSS responded
     }
 
